@@ -26,7 +26,7 @@ class TravelTime
       end
     end
 
-    # separate sniggs with a data point for either sensor
+    # separate sniffs with a data point for either sensor
     valid_time_sniffs.each do |valid_time_sniff|
       if valid_time_sniff.sensor_id == start_sensors || end_sensors
         valid_sensors << valid_time_sniff
