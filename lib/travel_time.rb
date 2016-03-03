@@ -19,12 +19,14 @@ class TravelTime
     valid_time_sniffs = []
     valid_sensors = []
 
+    # separate sniffs that fit time frame
     sniffs.each do |sniff|
       if sniff.time >= start_time && sniff.time <= end_time
         valid_time_sniffs << sniff
       end
     end
 
+    # separate sniggs with a data point for either sensor
     valid_time_sniffs.each do |valid_time_sniff|
       if valid_time_sniff.sensor_id == start_sensors || end_sensors
         valid_sensors << valid_time_sniff
