@@ -16,21 +16,18 @@ class TravelTime
   #
   # Note: You can get the fractional seconds from a DateTime using to_f (definition in date_time.rb)
   def self.average(sniffs, start_time, end_time, start_sensors, end_sensors)
-    valid_time_sniffs = []
-    valid_sensors = []
+    in_time_sniffs = []
 
-    # separate sniffs that fit time frame
     sniffs.each do |sniff|
       if sniff.time >= start_time && sniff.time <= end_time
-        valid_time_sniffs << sniff
+        in_time_sniffs << sniff
       end
     end
 
-    # separate sniffs with a data point for either sensor
-    valid_time_sniffs.each do |valid_time_sniff|
-      if valid_time_sniff.sensor_id == start_sensors || end_sensors
-        valid_sensors << valid_time_sniff
-      end
+    grouped = in_time_sniffs.group_by { |in_time_sniff| in_time_sniff.device_id }
+
+    grouped.each do |device_id, sniffs|
+      sniffs.select {|sniff| sniff.sensor_id == start_sensors } && sniffs.select {|sniff| sniff.sensor_id == end_sensors}
     end
   end
 end
