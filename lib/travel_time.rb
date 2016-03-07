@@ -47,6 +47,7 @@ class TravelTime
     trip_times = []
 
     time_pairs.each do |time_pair|
+      #only keep pairs where start_sensors was passed first
       if time_pair.first < time_pair.last
         trip_times << time_pair.last - time_pair.first
       end
