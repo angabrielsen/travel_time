@@ -16,6 +16,7 @@ class TravelTime
   #
   # Note: You can get the fractional seconds from a DateTime using to_f (definition in date_time.rb)
   def self.average(sniffs, start_time, end_time, start_sensors, end_sensors)
+    #keep sniffs in time frame
     in_time_sniffs = []
 
     sniffs.each do |sniff|
@@ -24,10 +25,39 @@ class TravelTime
       end
     end
 
+    #group sniffs by device id
     grouped = in_time_sniffs.group_by { |in_time_sniff| in_time_sniff.device_id }
 
+    #create an array of pairs of sniffs that passed through both sensors
+    time_pairs = []
+
     grouped.each do |device_id, sniffs|
-      sniffs.select {|sniff| sniff.sensor_id == start_sensors } && sniffs.select {|sniff| sniff.sensor_id == end_sensors}
+      if sniffs.length > 1
+        first_start = sniffs.select {|sniff| start_sensors.include?(sniff.sensor_id) }
+        first_end = sniffs.select {|sniff| end_sensors.include?(sniff.sensor_id) }
+
+        time_pairs << [(first_start.first).time.to_f, (first_end.first).time.to_f]
+      elsif
+        nil
+      end
+    end
+
+    trip_times = []
+
+    time_pairs.each do |time_pair|
+      if time_pair.first < time_pair.last
+        trip_times << time_pair.last - time_pair.first
+      end
+    end
+
+    trip_times.each do |time|
+      @avgs = trip_times.inject { |sum, pair| sum + pair } / trip_times.size
+    end
+
+    if trip_times.size == 0
+      nil
+    else
+      @avgs
     end
   end
 end
