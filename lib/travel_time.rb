@@ -28,10 +28,11 @@ class TravelTime
     #group sniffs by device id
     grouped = in_time_sniffs.group_by { |in_time_sniff| in_time_sniff.device_id }
 
-    #create an array of pairs of sniffs that passed through both sensors
+    #create an array of pairs of sniffs that passed both sensors
     time_pairs = []
 
     grouped.each do |device_id, sniffs|
+      #only manipulate data from collections with more than one sniff
       if sniffs.length > 1
         first_start = sniffs.select {|sniff| start_sensors.include?(sniff.sensor_id) }
         first_end = sniffs.select {|sniff| end_sensors.include?(sniff.sensor_id) }
@@ -42,6 +43,7 @@ class TravelTime
       end
     end
 
+    #calculate times from start_sensors to end_sensors
     trip_times = []
 
     time_pairs.each do |time_pair|
@@ -50,10 +52,12 @@ class TravelTime
       end
     end
 
+    #avg all trip times
     trip_times.each do |time|
       @avgs = trip_times.inject { |sum, pair| sum + pair } / trip_times.size
     end
 
+    #display result
     if trip_times.size == 0
       nil
     else
