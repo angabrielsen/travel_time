@@ -54,7 +54,7 @@ class TravelTime
     end
 
     #avg all trip times
-    trip_times.each do |time|
+    trip_times.each do
       @avgs = trip_times.inject { |sum, pair| sum + pair } / trip_times.size
     end
 
